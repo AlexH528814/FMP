@@ -9,6 +9,9 @@ public class LookCam : MonoBehaviour
 
 	float rotX, rotY;
 
+	public Transform player;
+
+
 	//Called on the first frame
 	void Start(){
 		Cursor.lockState = CursorLockMode.Locked;
@@ -16,16 +19,19 @@ public class LookCam : MonoBehaviour
 	}
 
 	void Update(){
-		float mousey= Input.GetAxis("Mouse Y");
-		float mousex= Input.GetAxis("Mouse X");
+		float mousey= Input.GetAxis("Mouse Y") * rotationSpeed * 0.1f;
+		float mousex= Input.GetAxis("Mouse X") * rotationSpeed * 0.1f;
 		
-		rotX += mousey * rotationSpeed * 0.1f;
-		rotY += mousex * rotationSpeed * 0.1f;
+		rotX -= mousey;
+		rotY += mousex;
 
 		rotX = Mathf.Clamp(rotX, -80, 80);
 
-		Quaternion localRotation = Quaternion.Euler(-rotX, rotY, 0.0f);
-		transform.rotation = localRotation;
-	}
+        Quaternion lastRot = Quaternion.Euler(rotX, rotY, 0);
+
+        transform.rotation = lastRot;
+
+        player.rotation = Quaternion.Euler(0, rotY, 0);
+    }
 
 }

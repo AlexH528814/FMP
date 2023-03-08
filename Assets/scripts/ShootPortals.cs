@@ -20,7 +20,9 @@ public class ShootPortals : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-	    player.eulerAngles = new Vector3(0, transform.rotation.y * 360, 0);
+	    player.rotation = Quaternion.Euler(0, transform.rotation.y * 360, 0);
+		Debug.Log(transform.rotation.y * 360);
+		Debug.Log(transform.rotation.y);
 
    	if (Input.GetMouseButtonDown(0)) SpawnPortal(blueportal);
 
@@ -44,9 +46,7 @@ public class ShootPortals : MonoBehaviour
 			portal.transform.position = hit.point;
 			portal.transform.rotation = hit.transform.rotation;
 	
-			if ((portal.transform.rotation.x <=45 && portal.transform.rotation.x >= -45) || (portal.transform.rotation.z <= 45 && portal.transform.rotation.z >= -45))
-			portal.transform.eulerAngles = new Vector3(portal.transform.rotation.x, transform.rotation.y * 360, portal.transform.rotation.z);
-		}
+		}	
 		else
 		Debug.Log("Failed");
     }

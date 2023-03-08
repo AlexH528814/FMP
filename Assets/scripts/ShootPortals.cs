@@ -21,8 +21,7 @@ public class ShootPortals : MonoBehaviour
     void Update()
     {
 	    player.rotation = Quaternion.Euler(0, transform.rotation.y * 360, 0);
-		Debug.Log(transform.rotation.y * 360);
-		Debug.Log(transform.rotation.y);
+		
 
    	if (Input.GetMouseButtonDown(0)) SpawnPortal(blueportal);
 

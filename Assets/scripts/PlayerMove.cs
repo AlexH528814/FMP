@@ -5,9 +5,16 @@ using UnityEngine.UIElements;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float moveSpeed = 10f;
+    public float moveSpeed = 10f, jumpForce = 10f, gravity;
+
+    public Transform groundCheck;
+    public float groundDistance;
+    public LayerMask mask1;
+
+    public bool isGrounded;
 
     Rigidbody rb;
+    Vector3 velocity;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,11 +24,29 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Physics.CheckSphere(groundCheck.position, groundDistance, mask1))
+            isGrounded = true;
+        else isGrounded = false;
+
+
+
+        float downspeed = -gravity;
+
+        if (isGrounded)
+        {
+            downspeed = 0f;
+        }
+
         float horizontal = Input.GetAxisRaw("Horizontal") * moveSpeed;
         float vertical = Input.GetAxisRaw("Vertical") * moveSpeed;
 
         Vector3 move = transform.right * horizontal + transform.forward * vertical;
-    
-        rb.velocity = move;
+
+        velocity = new Vector3(move.x, downspeed, move.z);
+
+        rb.velocity= velocity;
+
+        Debug.Log(rb.velocity);
+        
     }
 }

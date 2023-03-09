@@ -42,7 +42,7 @@ public class ShootPortals : MonoBehaviour
 
 			if (portal.activeInHierarchy == false) portal.SetActive(true);
 			Debug.Log(hit.point);
-			portal.transform.position = hit.point;
+			portal.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 			portal.transform.rotation = hit.transform.rotation;
 	
 		}	

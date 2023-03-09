@@ -5,16 +5,16 @@ using UnityEngine.UIElements;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float moveSpeed = 10f, jumpForce = 10f, gravity;
+    public float moveSpeed = 10f, jumpSpeed = 10f;
 
     public Transform groundCheck;
     public float groundDistance;
-    public LayerMask mask1;
+    public LayerMask mask;
 
-    public bool isGrounded;
+    public bool isGrounded, isJumping;
 
     Rigidbody rb;
-    Vector3 velocity;
+    Vector3 velocity, move;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,29 +24,32 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Physics.CheckSphere(groundCheck.position, groundDistance, mask1))
-            isGrounded = true;
-        else isGrounded = false;
 
 
-
-        float downspeed = -gravity;
-
-        if (isGrounded)
-        {
-            downspeed = 0f;
-        }
 
         float horizontal = Input.GetAxisRaw("Horizontal") * moveSpeed;
         float vertical = Input.GetAxisRaw("Vertical") * moveSpeed;
 
-        Vector3 move = transform.right * horizontal + transform.forward * vertical;
+		move = transform.right * horizontal + transform.up * rb.velocity.y + transform.forward * vertical;
 
-        velocity = new Vector3(move.x, downspeed, move.z);
+		if (isGrounded){
 
-        rb.velocity= velocity;
+			if (Input.GetKeyDown(KeyCode.Space) && !isJumping){
+				move.y = jumpSpeed;
+				isJumping = true;
+			}
+		}
 
-        Debug.Log(rb.velocity);
-        
+        velocity = new Vector3(move.x, move.y, move.z);
+        rb.velocity = velocity;
     }
+
+	void FixedUpdate(){
+		if (Physics.CheckSphere(groundCheck.position, groundDistance, mask)){
+			isJumping = false;
+			isGrounded = true;
+		}
+	}
+
+
 }
